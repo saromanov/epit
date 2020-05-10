@@ -1,0 +1,7 @@
+dev:
+    command: w
+
+prod:
+    env:
+        - TEST_APP=foobar
+    script: make run
