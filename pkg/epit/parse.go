@@ -4,22 +4,41 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mitchellh/mapstructure"
 	"github.com/saromanov/cowrow"
 )
 
-// LoadConfig provides loading of configuration file
-func LoadConfig(path string) error {
+type Stage struct {
+	Command string
+}
+
+// Config provides definition of configuration
+type Config map[string]interface{}
+
+// loadConfig provides loading of configuration file
+func loadConfig(path string) (Config, error) {
 
 	if path == "" {
-		return errors.New("path to config is empty")
+		return nil, errors.New("path to config is empty")
 	}
 
-	cfg := map[string]interface{}{}
+	cfg := Config{}
 	err := cowrow.LoadByPath(path, &cfg)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	fmt.Println(cfg)
+	if err := validateConfig(cfg); err != nil {
+		return nil, fmt.Errorf("unable to validate config: %v", err)
+	}
+
+	return cfg, nil
+}
+
+func validateConfig(cfg Config) error {
+	if len(cfg) == 0 {
+		return errors.New("stage on the config is not defined")
+	}
+
 	return nil
 }

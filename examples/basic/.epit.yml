@@ -1,5 +1,9 @@
 dev:
-    command: w
+    steps:
+        - name: first
+          command: w
+        - name: build
+          command: date
 
 prod:
     env:
