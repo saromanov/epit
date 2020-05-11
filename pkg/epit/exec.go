@@ -1,6 +1,9 @@
 package epit
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/mitchellh/mapstructure"
+)
 
 // ExecStage provides execution of the stage
 func ExecStage(path, name string) error {
@@ -11,6 +14,10 @@ func ExecStage(path, name string) error {
 	stage, ok := cfg[name]
 	if !ok {
 		return fmt.Errorf("name of the stahe is not found")
+	}
+	st := &Stage{}
+	if err := mapstructure.Decode(stage, &st); err != nil {
+		return fmt.Errorf("unable to decode structure: %v", err)
 	}
 	fmt.Println(stage)
 	return nil

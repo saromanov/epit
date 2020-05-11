@@ -3,8 +3,7 @@ package epit
 import (
 	"errors"
 	"fmt"
-
-	"github.com/mitchellh/mapstructure"
+	
 	"github.com/saromanov/cowrow"
 )
 

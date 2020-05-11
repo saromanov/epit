@@ -12,7 +12,7 @@ func main() {
 	if err != nil {
 		panic("unable to init logging")
 	}
-	if err := epit.LoadConfig("./examples/basic/.epit.yml"); err != nil {
+	if err := epit.ExecStage("./examples/basic/.epit.yml", "dev"); err != nil {
 		log.Fatal(fmt.Sprintf("unable to parse config: %v", err))
 	}
 }
