@@ -8,4 +8,4 @@ dev:
 prod:
     env:
         - TEST_APP=foobar
-    command: w
+    command: echo $TEST_APP

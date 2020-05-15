@@ -11,6 +11,7 @@ import (
 
 // run provides running of the stage
 func run(cfg Config) error {
+	addEnvVariables(cfg["env"].([]interface{}))
 	ok, err := checkFirstLevel(cfg)
 	if err != nil {
 		return fmt.Errorf("unable to check first level of the config file")
