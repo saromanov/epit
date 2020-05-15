@@ -26,14 +26,12 @@ func run(cfg Config) error {
 func checkFirstLevel(cfg Config) (bool, error) {
 	scr, ok := cfg[script]
 	if ok {
-		fmt.Println("SCRIPT: ", scr)
-		return true, nil
+		return true, execCommand(scr.(string))
 	}
 
 	cmd, ok := cfg[command]
 	if ok {
-		fmt.Println("cmd ", cmd)
-		return true, nil
+		return true, execCommand(cmd.(string))
 	}
 
 	return false, nil
