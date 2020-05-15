@@ -50,8 +50,8 @@ func execCommand(command string) error {
 	if err != nil {
 		return fmt.Errorf("unable to execute command: %v", err)
 	}
-	outStr, errStr := string(stdoutBuf.Bytes()), string(stderrBuf.Bytes())
-	fmt.Printf("\nout:\n%s\nerr:\n%s\n", outStr, errStr)
+	outStr := string(stdoutBuf.Bytes())
+	fmt.Printf("\nout:\n%s\n", outStr)
 	return nil
 }
 
