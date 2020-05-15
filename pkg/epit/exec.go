@@ -16,11 +16,10 @@ func ExecStage(path, name string) error {
 	if !ok {
 		return fmt.Errorf("name of the stahe is not found")
 	}
-	fmt.Println("ST: ", stage)
 	st := Config{}
 	if err := mapstructure.Decode(stage, &st); err != nil {
 		return fmt.Errorf("unable to decode structure: %v", err)
 	}
-	fmt.Println("Stage:", st["steps"])
+
 	return nil
 }
