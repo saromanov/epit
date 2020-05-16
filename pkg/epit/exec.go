@@ -21,5 +21,5 @@ func ExecStage(path, name string) error {
 		return fmt.Errorf("unable to decode structure: %v", err)
 	}
 
-	return run(st)
+	return run(name, st)
 }

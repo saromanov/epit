@@ -12,12 +12,12 @@ import (
 )
 
 // run provides running of the stage
-func run(cfg Config) error {
+func run(name string, cfg Config) error {
 	envs, okEvs := cfg[env]
 	if okEvs {
 		prepareEnvVars(envs.([]interface{}), setEnvVariables)
 	}
-	ok, err := checkFirstLevel(cfg)
+	ok, err := checkFirstLevel(name, cfg)
 	if err != nil {
 		return fmt.Errorf("unable to check first level of the config file")
 	}
@@ -32,7 +32,8 @@ func run(cfg Config) error {
 }
 
 // finding executing paths at the first level of the stage
-func checkFirstLevel(cfg Config) (bool, error) {
+func checkFirstLevel(name string, cfg Config) (bool, error) {
+	info("Executing of the task %s\n", name)
 	scr, ok := cfg[script]
 	if ok {
 		return true, execCommand(scr.(string))
