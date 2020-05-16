@@ -3,16 +3,9 @@ package epit
 import (
 	"errors"
 	"fmt"
-	
+
 	"github.com/saromanov/cowrow"
 )
-
-type Stage struct {
-	Command string
-}
-
-// Config provides definition of configuration
-type Config map[string]interface{}
 
 // loadConfig provides loading of configuration file
 func loadConfig(path string) (Config, error) {

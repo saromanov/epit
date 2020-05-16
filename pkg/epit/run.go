@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 // run provides running of the stage
@@ -23,7 +25,7 @@ func run(cfg Config) error {
 		return nil
 	}
 
-	return nil
+	return checkSteps(cfg)
 }
 
 // finding executing paths at the first level of the stage
@@ -39,6 +41,37 @@ func checkFirstLevel(cfg Config) (bool, error) {
 	}
 
 	return false, nil
+}
+
+// checkSteps provides checking of the steps on config
+func checkSteps(cfg Config) error {
+	s, ok := cfg[steps]
+	if !ok {
+		return nil
+	}
+	for _, i := range s.([]interface{}) {
+		st := Stage{}
+		if err := mapstructure.Decode(i, &st); err != nil {
+			return fmt.Errorf("unable to decode structure: %v", err)
+		}
+		if err := execStage(st); err != nil {
+			return fmt.Errorf("unable to execute stage: %v", err)
+		}
+	}
+	return nil
+}
+
+// execStage provides executing of the stage
+func execStage(st Stage) error {
+	if st.Command == "" {
+		return fmt.Errorf("command is not defined")
+	}
+
+	if len(st.Envs) > 0 {
+		addEnvVariables(st.Envs)
+	}
+
+	return execCommand(st.Command)
 }
 
 func execCommand(command string) error {
