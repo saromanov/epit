@@ -13,15 +13,18 @@ import (
 
 // run provides running of the stage
 func run(cfg Config) error {
-	envs, ok := cfg[env]
-	if ok {
-		addEnvVariables(envs.([]interface{}))
+	envs, okEvs := cfg[env]
+	if okEvs {
+		prepareEnvVars(envs.([]interface{}), setEnvVariables)
 	}
 	ok, err := checkFirstLevel(cfg)
 	if err != nil {
 		return fmt.Errorf("unable to check first level of the config file")
 	}
 	if ok {
+		if okEvs {
+			prepareEnvVars(envs.([]interface{}), unsetEnvVariables)
+		}
 		return nil
 	}
 
@@ -73,7 +76,7 @@ func execStage(st Stage) error {
 	}
 
 	if len(st.Envs) > 0 {
-		addEnvVariables(st.Envs)
+		prepareEnvVars(st.Envs, setEnvVariables)
 	}
 
 	return execCommand(st.Command)

@@ -5,8 +5,7 @@ import (
 	"strings"
 )
 
-// adding environment variables to the stage
-func addEnvVariables(vars []interface{}) {
+func prepareEnvVars(vars []interface{}, action func(string, string)) {
 	if len(vars) == 0 {
 		return
 	}
@@ -17,6 +16,16 @@ func addEnvVariables(vars []interface{}) {
 		if len(data) != 2 {
 			continue
 		}
+		action(data[0], data[1])
 		os.Setenv(data[0], data[1])
 	}
+}
+
+// setting environment variables to the stage
+func setEnvVariables(k, v string) {
+	os.Setenv(k, v)
+}
+
+func unsetEnvVariables(k, v string) {
+	os.Unsetenv(k)
 }
