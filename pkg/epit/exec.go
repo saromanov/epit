@@ -14,7 +14,7 @@ func ExecStage(path, name string) error {
 	}
 	stage, ok := cfg[name]
 	if !ok {
-		return fmt.Errorf("name of the stahe is not found")
+		return fmt.Errorf("name of the stage is not found")
 	}
 	st := Config{}
 	if err := mapstructure.Decode(stage, &st); err != nil {

@@ -11,7 +11,7 @@ import (
 
 // run provides running of the stage
 func run(cfg Config) error {
-	envs, ok := cfg["env"]
+	envs, ok := cfg[env]
 	if ok {
 		addEnvVariables(envs.([]interface{}))
 	}
