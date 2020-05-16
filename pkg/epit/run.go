@@ -11,7 +11,10 @@ import (
 
 // run provides running of the stage
 func run(cfg Config) error {
-	addEnvVariables(cfg["env"].([]interface{}))
+	envs, ok := cfg["env"]
+	if ok {
+		addEnvVariables(envs.([]interface{}))
+	}
 	ok, err := checkFirstLevel(cfg)
 	if err != nil {
 		return fmt.Errorf("unable to check first level of the config file")
@@ -50,8 +53,6 @@ func execCommand(command string) error {
 	if err != nil {
 		return fmt.Errorf("unable to execute command: %v", err)
 	}
-	outStr := string(stdoutBuf.Bytes())
-	fmt.Printf("\nout:\n%s\n", outStr)
 	return nil
 }
 
