@@ -49,11 +49,16 @@ func checkSteps(cfg Config) error {
 	if !ok {
 		return nil
 	}
-	for _, i := range s.([]interface{}) {
+	for i, n := range s.([]interface{}) {
 		st := Stage{}
-		if err := mapstructure.Decode(i, &st); err != nil {
+		if err := mapstructure.Decode(n, &st); err != nil {
 			return fmt.Errorf("unable to decode structure: %v", err)
 		}
+		step := st.Name
+		if step == "" {
+			step = fmt.Sprintf("%d", i+1)
+		}
+		info("Executing of the step %s\n", step)
 		if err := execStage(st); err != nil {
 			return fmt.Errorf("unable to execute stage: %v", err)
 		}
