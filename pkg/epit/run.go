@@ -9,12 +9,14 @@ import (
 	"strings"
 
 	"github.com/mitchellh/mapstructure"
+	"go.uber.org/zap"
 )
 
 // run provides running of the stage
-func run(name string, cfg Config) error {
+func run(logger *zap.Logger, name string, cfg Config) error {
 	envs, okEvs := cfg[env]
 	if okEvs {
+		logger.Info("prepare of environment variables")
 		prepareEnvVars(envs.([]interface{}), setEnvVariables)
 	}
 	ok, err := checkFirstLevel(name, cfg)
@@ -23,6 +25,7 @@ func run(name string, cfg Config) error {
 	}
 	if ok {
 		if okEvs {
+			logger.Info("unset environment variables")
 			prepareEnvVars(envs.([]interface{}), unsetEnvVariables)
 		}
 		return nil

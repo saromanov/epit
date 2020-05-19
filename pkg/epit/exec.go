@@ -4,10 +4,11 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/mapstructure"
+	"go.uber.org/zap"
 )
 
 // ExecStage provides execution of the stage
-func ExecStage(path, name string) error {
+func ExecStage(logger *zap.Logger, path, name string) error {
 	cfg, err := loadConfig(path)
 	if err != nil {
 		return fmt.Errorf("ExecStage: unable to load config: %v", err)
