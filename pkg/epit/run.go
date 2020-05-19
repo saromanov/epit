@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/mitchellh/mapstructure"
 	"go.uber.org/zap"
@@ -83,7 +84,14 @@ func execStage(st Stage) error {
 		prepareEnvVars(st.Envs, setEnvVariables)
 	}
 
-	return execCommand(st.Command)
+	start := time.Now()
+	if err := execCommand(st.Command); err != nil {
+		return fmt.Errorf("unable to execute command: %v", err)
+	}
+	if st.Duration {
+		info("Duration of step %s is %v", st.Name, time.Since(start).Seconds())
+	}
+	return nil
 }
 
 func execCommand(command string) error {

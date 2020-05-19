@@ -22,5 +22,5 @@ func ExecStage(logger *zap.Logger, path, name string) error {
 		return fmt.Errorf("unable to decode structure: %v", err)
 	}
 
-	return run(name, st)
+	return run(logger, name, st)
 }

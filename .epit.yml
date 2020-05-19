@@ -2,6 +2,7 @@ dev:
     steps:
         - name: first
           command: w
+          duration: true
         - name: build
           command: date
 
