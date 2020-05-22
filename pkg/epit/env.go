@@ -11,7 +11,13 @@ func prepareEnvVars(vars []interface{}, action func(string, string)) {
 	}
 
 	for _, v := range vars {
+		if v == nil {
+			continue
+		}
 		s := v.(string)
+		if s == "" {
+			continue
+		}
 		data := strings.Split(strings.TrimSpace(s), "=")
 		if len(data) != 2 {
 			continue
