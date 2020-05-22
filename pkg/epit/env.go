@@ -23,7 +23,6 @@ func prepareEnvVars(vars []interface{}, action func(string, string)) {
 			continue
 		}
 		action(data[0], data[1])
-		os.Setenv(data[0], data[1])
 	}
 }
 
