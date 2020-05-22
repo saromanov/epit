@@ -1,5 +1,9 @@
 package epit
 
+// Config provides definition of configuration
+type Config map[string]interface{}
+
+// Stage defined model for stage on config file
 type Stage struct {
 	// Command for execution
 	Command string
@@ -10,6 +14,3 @@ type Stage struct {
 	// list of environment variables in the format FOO=BAR
 	Envs []interface{}
 }
-
-// Config provides definition of configuration
-type Config map[string]interface{}

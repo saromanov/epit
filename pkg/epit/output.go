@@ -6,3 +6,8 @@ import "github.com/fatih/color"
 func info(format string, a ...interface{}) {
 	color.Blue(format, a...)
 }
+
+// fail returns text for error
+func fail(format string, a ...interface{}) {
+	color.Red(format, a...)
+}

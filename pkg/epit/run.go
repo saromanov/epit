@@ -68,7 +68,8 @@ func checkSteps(cfg Config) error {
 		}
 		info("Executing of the step %s\n", step)
 		if err := execStage(st); err != nil {
-			return fmt.Errorf("unable to execute stage: %v", err)
+			fail("unable to execute step %s %v\n", step, err)
+			return fmt.Errorf("unable to execute step: %v", err)
 		}
 	}
 	return nil
