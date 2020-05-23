@@ -12,15 +12,19 @@ import (
 const configFilePath = ".epit.yml"
 
 func main() {
+	stage := os.Getenv("STAGE")
 	args := os.Args
-	if len(args) == 1 {
+	if stage == "" && len(args) == 1 {
 		log.Fatal("name of the stage is not defined")
+	}
+	if stage == "" {
+		stage = args[1]
 	}
 	log, err := zap.NewProduction()
 	if err != nil {
 		panic("unable to init logging")
 	}
-	if err := epit.ExecStage(log, configFilePath, args[1]); err != nil {
+	if err := epit.ExecStage(log, configFilePath, stage); err != nil {
 		log.Fatal(fmt.Sprintf("unable to parse config: %v", err))
 	}
 }

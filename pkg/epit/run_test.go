@@ -12,4 +12,7 @@ func TestExecStage(t *testing.T) {
 	assert.NoError(t, execStage(Stage{
 		Command: "w",
 	}))
+	assert.Error(t, execStage(Stage{
+		Command: "abc",
+	}))
 }
