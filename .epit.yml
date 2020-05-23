@@ -1,7 +1,7 @@
 dev:
     steps:
         - name: first
-          command: w
+          command: apk
           duration: true
         - name: build
           command: date
