@@ -1,13 +1,13 @@
 FROM golang:alpine as builder
 
-ADD ./backend/app /build/backend/app
-ADD ./backend/go.mod /build/backend/go.mod
-ADD ./backend/go.sum /build/backend/go.sum
+RUN mkdir epit
+ADD . /epit
+WORKDIR /epit
 
 RUN go mod download 
-RUN go build -o app ./cmd/main.go
+RUN go build -o epit ./cmd/main.go
 
 FROM alpine
 WORKDIR /app
-COPY --from=builder /src/goapp /app/
-ENTRYPOINT ./goapp
+COPY --from=builder /epit/epit /bin/epit
+ENTRYPOINT epit
