@@ -1,22 +1,30 @@
 package epit
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/mitchellh/mapstructure"
 	"go.uber.org/zap"
 )
 
+var (
+	errNoLogger = errors.New("ExecStage: logger is not defined")
+	errNoPath   = errors.New("ExecStage: path is not defined")
+	errNoName   = errors.New("ExecStage: name of the stage is not defined")
+	errNoStage  = errors.New("ExecStage: name of the stage is not found")
+)
+
 // ExecStage provides execution of the stage
 func ExecStage(logger *zap.Logger, path, name string) error {
 	if logger == nil {
-		return fmt.Errorf("ExecStage: logger is not defined")
+		return errNoLogger
 	}
 	if path == "" {
-		return fmt.Errorf("ExecStage: path is not defined")
+		return errNoPath
 	}
 	if name == "" {
-		return fmt.Errorf("ExecStage: name of the stage is not defined")
+		return errNoName
 	}
 	cfg, err := loadConfig(path)
 	if err != nil {
@@ -24,7 +32,7 @@ func ExecStage(logger *zap.Logger, path, name string) error {
 	}
 	stage, ok := cfg[name]
 	if !ok {
-		return fmt.Errorf("ExecStage: name of the stage is not found")
+		return errNoStage
 	}
 	st := Config{}
 	if err := mapstructure.Decode(stage, &st); err != nil {

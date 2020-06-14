@@ -22,7 +22,7 @@ func main() {
 	}
 	log, err := zap.NewProduction()
 	if err != nil {
-		panic("unable to init logging")
+		log.Fatal(fmt.Sprintf("unable to init logging: %v", err))
 	}
 	if err := epit.ExecStage(log, configFilePath, stage); err != nil {
 		log.Fatal(fmt.Sprintf("unable to parse config: %v", err))
