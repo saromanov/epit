@@ -1,10 +1,10 @@
 dev:
     steps:
-        - name: first
-          command: apk
-          duration: true
         - name: build
-          command: date
+          command: go build -o epit ./cmd/main.go
+          duration: true
+        - name: test
+          command: go test ./...
 
 prod:
     env:
