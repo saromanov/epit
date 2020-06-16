@@ -57,12 +57,13 @@ func checkSteps(cfg Config) error {
 	if !ok {
 		return nil
 	}
-	parallel, ok := cfg[parallel]
+	var parallelAct bool
+	parallelRaw, ok := cfg[parallel]
 	if ok {
-
+		parallelAct = parallelRaw.(bool)
 	}
 
-	runStage := func(s int) error {
+	runStage := func(i int, n interface{}) error {
 		st := Stage{}
 		if err := mapstructure.Decode(n, &st); err != nil {
 			return fmt.Errorf("unable to decode structure: %v", err)
@@ -77,20 +78,15 @@ func checkSteps(cfg Config) error {
 			return fmt.Errorf("unable to execute step: %v", err)
 		}
 		return nil
-	}()
+	}
 	for i, n := range s.([]interface{}) {
-		st := Stage{}
-		if err := mapstructure.Decode(n, &st); err != nil {
-			return fmt.Errorf("unable to decode structure: %v", err)
+		if parallelAct {
+			go runStage(i, n)
+			continue
 		}
-		step := st.Name
-		if step == "" {
-			step = fmt.Sprintf("%d", i+1)
-		}
-		info("Executing of the step %s\n", step)
-		if err := execStage(st); err != nil {
-			fail("unable to execute step %s %v\n", step, err)
-			return fmt.Errorf("unable to execute step: %v", err)
+
+		if err := runStage(i, n); err != nil {
+			return fmt.Errorf("unable to run stage: %v", err)
 		}
 	}
 	return nil
