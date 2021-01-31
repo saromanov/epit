@@ -24,7 +24,7 @@ func main() {
 	if err != nil {
 		log.Fatal(fmt.Sprintf("unable to init logging: %v", err))
 	}
-	if err := epit.ExecStage(log, configFilePath, stage); err != nil {
+	if err := epit.Exec(log, configFilePath, stage); err != nil {
 		log.Fatal(fmt.Sprintf("unable to parse config: %v", err))
 	}
 }

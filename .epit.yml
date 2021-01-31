@@ -1,5 +1,7 @@
 dev:
     steps:
+        - name: envs
+          command: go env
         - name: build
           command: go build -o epit ./cmd/main.go
           duration: true
