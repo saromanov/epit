@@ -15,17 +15,25 @@ var (
 	errNoStage  = errors.New("ExecStage: name of the stage is not found")
 )
 
+// Exec provides executing of the stages
+func Exec(logger *zap.Logger, path, name string) error {
+	if err := validate(logger, path); err != nil {
+		return fmt.Errorf("unable to validate input: %v", err)
+	}
+	cfg, err := loadConfig(path)
+	if err != nil {
+		return fmt.Errorf("ExecStage: unable to load config: %v", err)
+	}
+
+	for name, param := range cfg {
+		fmt.Println(name, param)
+	}
+	return nil
+
+}
+
 // ExecStage provides execution of the stage
 func ExecStage(logger *zap.Logger, path, name string) error {
-	if logger == nil {
-		return errNoLogger
-	}
-	if path == "" {
-		return errNoPath
-	}
-	if name == "" {
-		return errNoName
-	}
 	cfg, err := loadConfig(path)
 	if err != nil {
 		return fmt.Errorf("ExecStage: unable to load config: %v", err)
@@ -40,4 +48,14 @@ func ExecStage(logger *zap.Logger, path, name string) error {
 	}
 
 	return run(logger, name, st)
+}
+
+func validate(logger *zap.Logger, path string) error {
+	if logger == nil {
+		return errNoLogger
+	}
+	if path == "" {
+		return errNoPath
+	}
+	return nil
 }
