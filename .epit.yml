@@ -1,12 +1,20 @@
 dev:
     steps:
         - name: envs
-          command: go env
+          env:
+            - TEST_REC=baran
+          command: echo $TEST_REC
         - name: build
-          command: go build -o epit ./cmd/main.go
+          command: go build -o epit_15 ./cmd/main.go
+          duration: true
+        - name: build16
+          command: /home/test/gowork/bin/go1.16beta1 build -o epit_16 ./cmd/main.go
           duration: true
         - name: test
           command: go test ./...
+        - name: checking
+          command: ls -la
+
 
 prod:
     env:

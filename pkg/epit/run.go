@@ -25,10 +25,12 @@ func run(logger *zap.Logger, name string, cfg Config) error {
 		return fmt.Errorf("unable to check first level of the config file")
 	}
 	if ok {
-		if okEvs {
-			logger.Info("unset environment variables")
-			prepareEnvVars(envs.([]interface{}), unsetEnvVariables)
+		if !okEvs {
+			return nil
 		}
+
+		logger.Info("unset environment variables")
+		prepareEnvVars(envs.([]interface{}), unsetEnvVariables)
 		return nil
 	}
 
