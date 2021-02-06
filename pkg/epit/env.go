@@ -9,7 +9,6 @@ func prepareEnvVars(vars []interface{}, action func(string, string)) {
 	if len(vars) == 0 {
 		return
 	}
-
 	for _, v := range vars {
 		if v == nil {
 			continue
@@ -22,7 +21,11 @@ func prepareEnvVars(vars []interface{}, action func(string, string)) {
 		if len(data) != 2 {
 			continue
 		}
-		action(data[0], data[1])
+		value := data[1]
+		if strings.HasPrefix(data[1], "$") {
+			value = os.Getenv(data[1][1:])
+		}
+		action(data[0], value)
 	}
 }
 
