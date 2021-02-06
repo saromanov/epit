@@ -117,7 +117,7 @@ func execStage(st Stage) error {
 func execCommand(command string) error {
 	name, args := prepareCommand(command)
 	cmd := exec.Command(name, args...)
-
+	cmd.Env = os.Environ()
 	var stdoutBuf, stderrBuf bytes.Buffer
 	cmd.Stdout = io.MultiWriter(os.Stdout, &stdoutBuf)
 	cmd.Stderr = io.MultiWriter(os.Stderr, &stderrBuf)
