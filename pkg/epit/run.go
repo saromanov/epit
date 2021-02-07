@@ -42,12 +42,12 @@ func checkFirstLevel(name string, cfg Config) (bool, error) {
 	info("Executing of the task %s\n", name)
 	scr, ok := cfg[script]
 	if ok {
-		return true, execCommand(scr.(string))
+		return true, execCommand(scr.(string), nil)
 	}
 
 	cmd, ok := cfg[command]
 	if ok {
-		return true, execCommand(cmd.(string))
+		return true, execCommand(cmd.(string), nil)
 	}
 
 	return false, nil
@@ -100,12 +100,9 @@ func execStage(st Stage) error {
 		return fmt.Errorf("command is not defined")
 	}
 
-	if len(st.Envs) > 0 {
-		prepareEnvVars(st.Envs, setEnvVariables)
-	}
-
+	envs := prepareEnvVars(st.Envs, setEnvVariables)
 	start := time.Now()
-	if err := execCommand(st.Command); err != nil {
+	if err := execCommand(st.Command, envs); err != nil {
 		return fmt.Errorf("unable to execute command: %v", err)
 	}
 	if st.Duration {
@@ -114,7 +111,7 @@ func execStage(st Stage) error {
 	return nil
 }
 
-func execCommand(command string) error {
+func execCommand(command string, envs map[string]interface{}) error {
 	name, args := prepareCommand(command)
 	cmd := exec.Command(name, args...)
 	cmd.Env = os.Environ()
