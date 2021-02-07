@@ -113,6 +113,7 @@ func execStage(st Stage) error {
 
 func execCommand(command string, envs map[string]interface{}) error {
 	name, args := prepareCommand(command)
+	name = replaceWithEnvVariables(command, envs)
 	cmd := exec.Command(name, args...)
 	cmd.Env = os.Environ()
 	var stdoutBuf, stderrBuf bytes.Buffer
@@ -133,4 +134,14 @@ func prepareCommand(cmd string) (string, []string) {
 		return res[0], []string{}
 	}
 	return res[0], res[1:]
+}
+
+// replacing command with environment variables
+func replaceWithEnvVariables(command string, envs map[string]interface{}) string {
+	for key, value := range envs {
+		if strings.Index(command, key) != -1 {
+			return strings.Replace(command, key, value.(string), -1)
+		}
+	}
+	return command
 }
