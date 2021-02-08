@@ -1,9 +1,5 @@
 dev:
     steps:
-        - name: envs
-          env:
-            - EXEC_PATH=$GO_EXEC_PATH
-          command: echo $TEST_REC
         - name: build
           command: go build -o epit_15 ./cmd/main.go
           duration: true
