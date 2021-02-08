@@ -113,7 +113,8 @@ func execStage(st Stage) error {
 
 func execCommand(command string, envs map[string]interface{}) error {
 	name, args := prepareCommand(command)
-	name = replaceWithEnvVariables(name, envs)
+	name, args = replaceWithEnvVariables(name, args, envs)
+	fmt.Println(name, args)
 	cmd := exec.Command(name, args...)
 	var stdoutBuf, stderrBuf bytes.Buffer
 	cmd.Stdout = io.MultiWriter(os.Stdout, &stdoutBuf)
@@ -136,11 +137,27 @@ func prepareCommand(cmd string) (string, []string) {
 }
 
 // replacing command with environment variables
-func replaceWithEnvVariables(command string, envs map[string]interface{}) string {
+func replaceWithEnvVariables(command string, args []string, envs map[string]interface{}) (string, []string) {
 	for key, value := range envs {
 		if strings.Index(command, key) != -1 {
-			return strings.Replace(command, fmt.Sprintf("$%s", key), value.(string), -1)
+			command = strings.Replace(command, fmt.Sprintf("$%s", key), value.(string), -1)
+			break
 		}
 	}
-	return command
+
+	retArgs := make([]string, len(args))
+	for i, _ := range args {
+		found := false
+		for key, value := range envs {
+			if strings.Index(args[i], key) != -1 {
+				found = true
+				retArgs[i] = strings.Replace(args[i], fmt.Sprintf("$%s", key), value.(string), -1)
+				break
+			}
+		}
+		if !found {
+			retArgs[i] = args[i]
+		}
+	}
+	return command, retArgs
 }

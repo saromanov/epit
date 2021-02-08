@@ -6,7 +6,8 @@ dev:
         - name: build16
           envs:
             - EXEC_PATH=$GO_EXEC_PATH
-          command: $EXEC_PATH/go1.16beta1 build -o epit_16 ./cmd/main.go
+            - $GO16_NAME=epic_16
+          command: $EXEC_PATH/go1.16beta1 build -o $GO16_NAME ./cmd/main.go
           duration: true
         - name: test
           command: go test ./...
@@ -14,6 +15,10 @@ dev:
           command: ls -la
 
 
+release:
+  steps:
+    - name: tag
+      command: git tag $GOPROJECT_TAG
 prod:
     env:
         - TEST_APP=foobar
