@@ -3,7 +3,9 @@ package epit
 import (
 	"errors"
 	"fmt"
+	"os"
 	"regexp"
+	"strings"
 
 	"github.com/mitchellh/mapstructure"
 	"go.uber.org/zap"
@@ -25,6 +27,7 @@ func Exec(logger *zap.Logger, path, pattern string) error {
 	if err != nil {
 		return fmt.Errorf("ExecStage: unable to load config: %v", err)
 	}
+	setExistsEnvVars()
 	for name, param := range cfg {
 		matched, err := regexp.MatchString(pattern, name)
 		if err != nil {
@@ -61,4 +64,16 @@ func validate(logger *zap.Logger, path string) error {
 		return errNoPath
 	}
 	return nil
+}
+
+func setExistsEnvVars() map[string]interface{} {
+	envs := os.Environ()
+	result := make(map[string]interface{})
+	for i, _ := range envs {
+		data := strings.Split(envs[i], "=")
+		if len(data) > 0 {
+			result[data[0]] = data[1]
+		}
+	}
+	return result
 }

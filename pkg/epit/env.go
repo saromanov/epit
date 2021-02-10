@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// parseEnvVars provides parsing of local env vars
 func prepareEnvVars(vars []interface{}, action func(string, string)) map[string]interface{} {
 	if len(vars) == 0 {
 		return nil
